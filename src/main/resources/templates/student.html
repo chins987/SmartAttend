@@ -1,0 +1,88 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Student Attendance</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <header>
+    <div>
+      <h1>Student Attendance</h1>
+      <p th:text="${student.name + ' · ' + student.studentId}">Student</p>
+    </div><a class="button" href="/logout">Logout</a>
+  </header>
+  <section class="card">
+    <h2>My Attendance History</h2>
+
+    <div th:if="${#lists.isEmpty(records)}">
+      <p>No attendance records found.</p>
+    </div>
+
+    <table th:unless="${#lists.isEmpty(records)}">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Class Date & Time</th>
+          <th>Status</th>
+          <th>Verification Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="record : ${records}">
+          <td th:text="${record.subject}"></td>
+          <td th:text="${record.classTime}"></td>
+          <td th:text="${record.status}"></td>
+          <td>Location verified</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <main>
+    <section class="panel">
+      <h2>Mark attendance</h2>
+      <p>Live location is mandatory. Allow location access when your browser asks. No photo is required.</p>
+      <p><strong>Department:</strong> <span th:text="${student.department}"></span> | <strong>Section:</strong> <span
+          th:text="${student.section}"></span></p>
+      <p class="message" th:if="${message != ''}" th:text="${message}"></p>
+      <form id="locationForm" action="/student/attendance" method="post">
+        <label>Subject</label><input name="subject" required placeholder="Enter subject">
+        <label>Class date and time</label><input name="classTime" type="datetime-local" required>
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+        <button type="button" id="locationButton">Verify my location and mark Present</button>
+        <p id="locationMessage" class="message"></p>
+      </form>
+    </section>
+  </main>
+  <script>
+    const button = document.getElementById('locationButton');
+    const message = document.getElementById('locationMessage');
+    const form = document.getElementById('locationForm');
+    button.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        message.textContent = 'This browser does not support location services.';
+        return;
+      }
+      button.disabled = true;
+      button.textContent = 'Checking your live location...';
+      message.textContent = 'Please allow location access.';
+      navigator.geolocation.getCurrentPosition((position) => {
+        document.getElementById('latitude').value = position.coords.latitude;
+        document.getElementById('longitude').value = position.coords.longitude;
+        message.textContent = 'Location received. Verifying with the server...';
+        form.submit();
+      }, (error) => {
+        button.disabled = false;
+        button.textContent = 'Verify my location and mark Present';
+        message.textContent = 'Location is required. Please enable GPS/location permission and try again. (' + error.message + ')';
+      }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manage Attendance</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><div><h1>Attendance Management</h1><p th:text="${role + ' access'}">Admin / Faculty</p></div><nav><a class="button" href="/">Dashboard</a><a class="button" href="/logout">Logout</a></nav></header>
+<main><section class="panel"><h2>Change attendance</h2><p>Admin and faculty can correct a record when necessary.</p>
+<table><tr><th>ID</th><th>Student</th><th>Subject</th><th>Class time</th><th>Current status</th><th>Change</th></tr>
+<tr th:each="r:${records}"><td th:text="${r.id}"></td><td th:text="${r.studentName + ' (' + r.studentId + ')'}"></td><td th:text="${r.subject}"></td><td th:text="${r.classTime}"></td><td th:text="${r.status}"></td><td><form class="inline-form" action="/attendance/update" method="post"><input type="hidden" name="recordId" th:value="${r.id}"><select name="status"><option value="Present" th:selected="${r.status == 'Present'}">Present</option><option value="Absent" th:selected="${r.status == 'Absent'}">Absent</option></select><button type="submit">Save</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(records)}"><td colspan="6">No records yet.</td></tr></table>
+</section></main></body></html>

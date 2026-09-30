@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartAttend</title>
+  <link rel="stylesheet" th:href="@{/style.css}" href="/style.css">
+</head>
+<body>
+  <main>
+    <section class="landing">
+      <h1>SmartAttend</h1>
+      <p class="tagline">Student attendance register</p>
+
+      <div class="choices">
+        <a class="choice" href="/student/login">
+          <span class="choice-title">Student login</span>
+        </a>
+        <a class="choice" href="/login">
+          <span class="choice-title">Faculty login</span>
+        </a>
+      </div>
+
+      <p class="signed-in" th:if="${role != null}">
+        Signed in as <strong th:text="${role}">ADMIN</strong>:
+        <a th:if="${role == 'ADMIN' or role == 'FACULTY'}" href="/manage">Manage attendance</a>
+        <a th:if="${role == 'ADMIN'}" href="/admin">Manage students</a>
+        <a href="/logout">Log out</a>
+      </p>
+    </section>
+  </main>
+</body>
+</html>
