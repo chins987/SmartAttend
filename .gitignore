@@ -14,3 +14,9 @@ target/
 # OS files
 .DS_Store
 Thumbs.db
+
+# WinBio build output
+*.exe
+*.obj
+*.pdb
+*.ilk
