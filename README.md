@@ -2,7 +2,7 @@
 
 **SmartAttend** is a Java Spring Boot-based smart attendance management system designed to simplify and improve the attendance process for students, faculty, and administrators.
 
-🚧 **Project Status: Ongoing / Under Development**
+🚧 **Project Status: Ongoing
 
 ## 🎯 Project Objective
 
